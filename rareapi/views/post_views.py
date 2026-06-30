@@ -51,6 +51,10 @@ def post_detail(request, pk):
     except Post.DoesNotExist:
         return Response({'error': 'Not found'}, status=404)
 
+    if request.method == 'GET':
+        if not post.approved and post.user != request.user and not request.user.is_staff:
+            return Response({'error': 'Not found'}, status=404)
+
     if request.method == 'DELETE':
         if post.user != request.user and not request.user.is_staff:
             return Response({'error': 'Forbidden'}, status=403)
