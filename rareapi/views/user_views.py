@@ -4,11 +4,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rareapi.models import RareUser, DemotionQueue
-from rareapi.serializers import ProfileDetailSerializer, ProfileListSerializer, DemotionQueueSerializer
+from rareapi.serializers import ProfileDetailSerializer, ProfileListSerializer, ProfileUpdateSerializer, DemotionQueueSerializer
 from rareapi.services import admin_actions
 
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def profile_detail(request, pk):
     try:
@@ -16,8 +16,18 @@ def profile_detail(request, pk):
     except RareUser.DoesNotExist:
         return Response({'error': 'Not found'}, status=404)
 
-    serializer = ProfileDetailSerializer(user, context={'request': request})
-    return Response(serializer.data)
+    if request.method == 'GET':
+        serializer = ProfileDetailSerializer(user, context={'request': request})
+        return Response(serializer.data)
+
+    if request.user.id != pk:
+        return Response({'error': 'Forbidden'}, status=403)
+
+    serializer = ProfileUpdateSerializer(user, data=request.data, partial=True)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=400)
+    serializer.save()
+    return Response(ProfileDetailSerializer(user, context={'request': request}).data)
 
 
 @api_view(['GET'])

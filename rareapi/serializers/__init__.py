@@ -1,4 +1,4 @@
-from .user_serializers import UserSummarySerializer, ProfileDetailSerializer, ProfileListSerializer, RegisterSerializer
+from .user_serializers import UserSummarySerializer, ProfileDetailSerializer, ProfileListSerializer, RegisterSerializer, ProfileUpdateSerializer
 from .category_serializers import CategorySerializer
 from .tag_serializers import TagSerializer
 from .post_serializers import PostDetailSerializer, PostListSerializer
