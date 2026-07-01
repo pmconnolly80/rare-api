@@ -97,7 +97,7 @@ def user_post_list(request, user_id):
     posts = (
         Post.objects
         .select_related('user', 'category')
-        .filter(user_id=user_id, approved=True)
+        .filter(user_id=user_id, approved=True, publication_date__lte=timezone.now().date())
         .order_by('-publication_date', '-id')
     )
     return Response(PostListSerializer(posts, many=True).data)
