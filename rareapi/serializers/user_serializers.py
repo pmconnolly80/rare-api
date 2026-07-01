@@ -6,7 +6,7 @@ class UserSummarySerializer(serializers.ModelSerializer):
     """Minimal user representation for nesting inside posts, comments, etc."""
     class Meta:
         model = RareUser
-        fields = ['id', 'username']
+        fields = ['id', 'username', 'first_name', 'last_name']
 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
