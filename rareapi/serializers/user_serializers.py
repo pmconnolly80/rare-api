@@ -21,8 +21,8 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = RareUser
         fields = [
-            'id', 'full_name', 'username', 'email',
-            'profile_image_url', 'created_on', 'user_type',
+            'id', 'full_name', 'first_name', 'last_name', 'username', 'email',
+            'bio', 'profile_image_url', 'created_on', 'user_type',
             'is_subscribed', 'subscriber_count', 'post_count',
         ]
 
@@ -80,3 +80,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             **validated_data,
             is_active=True,
         )
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    """Validates profile edits (first name, last name, bio) from the profile owner."""
+    class Meta:
+        model = RareUser
+        fields = ['first_name', 'last_name', 'bio']
